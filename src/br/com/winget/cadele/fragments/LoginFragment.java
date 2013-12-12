@@ -27,7 +27,7 @@ public class LoginFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.login, container, true);
+		View view = inflater.inflate(R.layout.login, container, false);
 		return view;
 	}
 	
@@ -55,6 +55,7 @@ public class LoginFragment extends Fragment {
 	}
 	
 	public class ButtonHandler implements OnClickListener {
+		@Override
 		public void onClick(View v) {
 			if (v.getId() == R.id.bt_entrar){
 				parser = (EditText) getView().findViewById(R.id.et_email);
@@ -63,7 +64,7 @@ public class LoginFragment extends Fragment {
 				senha = parser.getText().toString();
 				status = mCallback.autenticacao(email, senha);
 				if(status.equals("1")){
-					mCallback.atualizarLocalizacao();
+	//				mCallback.atualizarLocalizacao();
 					mCallback.trocarTela("login","menu");
 				}else{
 					tvStatus = (TextView) getView().findViewById(R.id.tv_erroLogin);

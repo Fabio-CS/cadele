@@ -30,7 +30,10 @@ public class RestClient {
     private ArrayList <NameValuePair> headers;
 
     private String url;
-
+    private final String url2 = "";
+    public final HttpPost resquestpost = null;
+    public final HttpGet resquestget = null;
+    
     private int responseCode;
     private String message;
 
@@ -88,20 +91,24 @@ public class RestClient {
                     }
                 }
 
-                HttpGet request = new HttpGet(url + combinedParams);
+                final HttpGet request = new HttpGet(url + combinedParams);
 
                 //add headers
                 for(NameValuePair h : headers)
                 {
                     request.addHeader(h.getName(), h.getValue());
                 }
-
-                executeRequest(request, url);
+                new Thread(new Runnable()
+                {
+                public void run() {
+                	executeRequest(request, url);
+                 }
+                 }).start();
                 break;
             }
             case POST:
             {
-                HttpPost request = new HttpPost(url);
+                final HttpPost request = new HttpPost(url);
 
                 //add headers
                 for(NameValuePair h : headers)
@@ -112,8 +119,14 @@ public class RestClient {
                 if(!params.isEmpty()){
                     request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
                 }
-
-                executeRequest(request, url);
+                
+                new Thread(new Runnable()
+                {
+                public void run() {
+                	executeRequest(request, url);
+                 }
+                 }).start();
+                
                 break;
             }
         }
@@ -125,7 +138,7 @@ public class RestClient {
 
         HttpResponse httpResponse;
 
-        try {
+        try {        	
             httpResponse = client.execute(request);
             responseCode = httpResponse.getStatusLine().getStatusCode();
             message = httpResponse.getStatusLine().getReasonPhrase();

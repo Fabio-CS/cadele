@@ -25,7 +25,7 @@ public class MapaFragment extends MapFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.mapa, container, true);
+		View view = inflater.inflate(R.layout.mapa, container, false);
 		return view;
 	}
 	
@@ -35,7 +35,7 @@ public class MapaFragment extends MapFragment {
 		super.onStart();
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.fg_mapa)).getMap();
 		map.clear();
-		localizacaoAmigo = mCallback.getLocalizacaoAmigo();
+		//localizacaoAmigo = mCallback.getLocalizacaoAmigo();
 		LatLng local = new LatLng(localizacaoAmigo.getLatitude(),localizacaoAmigo.getLongitude());
 		map.addMarker(new MarkerOptions().position(local).title(localizacaoAmigo.getData()));
 		map.moveCamera(CameraUpdateFactory.newLatLng(local));

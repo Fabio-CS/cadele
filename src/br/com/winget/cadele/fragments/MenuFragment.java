@@ -19,7 +19,7 @@ public class MenuFragment extends Fragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.menu, container, true);
+		View view = inflater.inflate(R.layout.menu, container, false);
 		return view;
 	}
 	
@@ -47,6 +47,7 @@ public class MenuFragment extends Fragment{
 	}
 	
 	public class ButtonHandler implements OnClickListener {
+		@Override
 		public void onClick(View v) {
 			if (v.getId() == R.id.bt_adicionar){
 					mCallback.trocarTela("menu","adicionar");

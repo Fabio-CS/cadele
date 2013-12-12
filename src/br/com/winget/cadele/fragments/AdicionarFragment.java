@@ -24,7 +24,7 @@ public class AdicionarFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.adicionar, container, true);
+		View view = inflater.inflate(R.layout.adicionar, container, false);
 		return view;
 	}
 	
@@ -47,6 +47,7 @@ public class AdicionarFragment extends Fragment {
 	}
 	
 	public class ButtonHandler implements OnClickListener {
+		@Override
 		public void onClick(View v) {
 			if (v.getId() == R.id.bt_procurar){
 				parser = (EditText) getView().findViewById(R.id.et_emailSearch);

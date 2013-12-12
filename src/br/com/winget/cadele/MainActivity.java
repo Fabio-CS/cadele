@@ -1,14 +1,11 @@
 package br.com.winget.cadele;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.gson.Gson;
 import br.com.winget.cadele.control.RestClient;
@@ -23,6 +20,7 @@ import br.com.winget.cadele.model.Localizacao;
 import br.com.winget.cadele.model.Usuario;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -30,14 +28,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.ViewGroup;
 
-public class MainActivity extends FragmentActivity implements InterLogin, GooglePlayServicesClient.ConnectionCallbacks,
-GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
+public class MainActivity extends FragmentActivity implements InterLogin{/*, GooglePlayServicesClient.ConnectionCallbacks,
+GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {*/
 	
 	private ArrayList<Usuario> amigos = new ArrayList<Usuario>();
 	private Usuario usuario = new Usuario();
 	private Localizacao localizacaoAmigo = new Localizacao();
 	private Localizacao localizacaoUser = new Localizacao();
-	private LocationClient locationLister = new LocationClient(this, this, this);
+	/*private LocationClient locationLister = new LocationClient(this, this, this);
 	// Milliseconds per second
     private static final int MILLISECONDS_PER_SECOND = 1000;
     // Update frequency in seconds
@@ -48,8 +46,9 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 
     
     // Define an object that holds accuracy and frequency parameters
-    LocationRequest mLocationRequest;
+    LocationRequest mLocationRequest;*/
 	
+	@Override
 	public ArrayList<Usuario> getAmigos(){
 		return amigos;
 	}
@@ -58,11 +57,9 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		 mLocationRequest = LocationRequest.create();
-	        // Use high accuracy
+	/*	 mLocationRequest = LocationRequest.create();
 	     mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-	        // Set the update interval to 5 seconds
-	     mLocationRequest.setInterval(UPDATE_INTERVAL);
+	     mLocationRequest.setInterval(UPDATE_INTERVAL);*/
 	}
 
 	@Override
@@ -70,10 +67,6 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
-	}
-	
-	public void getUserById() throws URISyntaxException{
-		
 	}
 
 	@Override
@@ -240,8 +233,9 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 		}
 		return mensagem;
 	}
+	
 
-	@Override
+	/*@Override
 	public Localizacao getLocalizacaoAmigo() {
 		return localizacaoAmigo;
 	}
@@ -251,7 +245,7 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 		System.out.print("Errou!");
 	}
 
-	@Override
+	/*@Override
 	public void onConnected(Bundle arg0) {
 		if (locationLister != null && locationLister.isConnected()) {
 			locationLister.requestLocationUpdates(mLocationRequest, this);
@@ -302,6 +296,6 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 		String response = client.getResponse();
 		localizacaoUser = json.fromJson(response, Localizacao.class);
 		
-	}
+	}*/
 
 }
