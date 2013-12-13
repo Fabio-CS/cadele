@@ -30,9 +30,6 @@ public class RestClient {
     private ArrayList <NameValuePair> headers;
 
     private String url;
-    private final String url2 = "";
-    public final HttpPost resquestpost = null;
-    public final HttpGet resquestget = null;
     
     private int responseCode;
     private String message;
@@ -91,24 +88,23 @@ public class RestClient {
                     }
                 }
 
-                final HttpGet request = new HttpGet(url + combinedParams);
+                HttpGet request = new HttpGet(url + combinedParams);
 
                 //add headers
                 for(NameValuePair h : headers)
                 {
                     request.addHeader(h.getName(), h.getValue());
                 }
-                new Thread(new Runnable()
-                {
-                public void run() {
+                /*new Thread(new Runnable(){
+                public void run() {*/
                 	executeRequest(request, url);
-                 }
-                 }).start();
+                 /*}
+                 }).start();*/
                 break;
             }
             case POST:
             {
-                final HttpPost request = new HttpPost(url);
+                HttpPost request = new HttpPost(url);
 
                 //add headers
                 for(NameValuePair h : headers)
@@ -120,12 +116,11 @@ public class RestClient {
                     request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
                 }
                 
-                new Thread(new Runnable()
-                {
-                public void run() {
+                /*new Thread(new Runnable(){
+                public void run() {*/
                 	executeRequest(request, url);
-                 }
-                 }).start();
+                 /*}
+                 }).start();*/
                 
                 break;
             }

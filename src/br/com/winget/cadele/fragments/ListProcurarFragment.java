@@ -41,6 +41,7 @@ public class ListProcurarFragment extends ListFragment{
 		}
 		adapter = new ArrayAdapter<Usuario>(getActivity(), android.R.layout.simple_list_item_multiple_choice, list);
 		setListAdapter(adapter);
+		
 	}
 	
 	public void addData(ArrayList<Usuario> users){
@@ -57,11 +58,21 @@ public class ListProcurarFragment extends ListFragment{
 	
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		Usuario amigo = (Usuario) l.getItemAtPosition(position);
-		status = mCallback.adicionarAmigo(mCallback.getUsuarioLogado().getId(), amigo.getId());
-		tvStatus = (TextView) getView().findViewById(R.id.tv_adicionado);
-		tvStatus.setText(status);
-		adapter.remove(amigo);
-		adapter.notifyDataSetChanged();
+		final Usuario amigo = (Usuario) l.getItemAtPosition(position);
+		new Thread(new Runnable(){
+            public void run() {
+				status = mCallback.adicionarAmigo(mCallback.getUsuarioLogado().getId(), amigo.getId());
+				Activity act = (Activity) mCallback;
+				act.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                    	//tvStatus = (TextView) getView().findViewById(R.id.tv_adicionado);
+						//tvStatus.setText(status);
+						adapter.remove(amigo);
+						adapter.notifyDataSetChanged();
+                    }
+				});
+			}
+         }).start();
 	}
 }

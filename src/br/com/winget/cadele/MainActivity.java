@@ -1,6 +1,9 @@
 package br.com.winget.cadele;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Iterator;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
@@ -8,6 +11,10 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
+
 import br.com.winget.cadele.control.RestClient;
 import br.com.winget.cadele.control.RestClient.RequestMethod;
 import br.com.winget.cadele.fragments.AdicionarFragment;
@@ -35,6 +42,7 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {*/
 	private Usuario usuario = new Usuario();
 	private Localizacao localizacaoAmigo = new Localizacao();
 	private Localizacao localizacaoUser = new Localizacao();
+	private static final String END_WEBSERVICE = "http://192.168.9.31:8080/WebserviceCadele/webresources/";
 	/*private LocationClient locationLister = new LocationClient(this, this, this);
 	// Milliseconds per second
     private static final int MILLISECONDS_PER_SECOND = 1000;
@@ -73,7 +81,7 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {*/
 	public String autenticacao(String email, String senha) {
 		Gson json = new Gson();
 		String mensagem = "Erro ao realizar login, verifique o e-mail e a senha";
-		RestClient client = new RestClient("http://10.0.2.2:8080/WebserviceCadele/webresources/user/login");
+		RestClient client = new RestClient(END_WEBSERVICE+"user/login/");
 		client.AddParam("email", email);
 		client.AddParam("senha", senha);
 		client.AddHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -144,8 +152,8 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {*/
 	@Override
 	public String cadastrar(String nome, String email, String senha) {
 		Gson json = new Gson();
-		String mensagem = "";
-		RestClient client = new RestClient("http://10.0.2.2:8080/WebserviceCadele/webresources/user/");
+		String mensagem = "Erro ao cadastrar usu√°rio";
+		RestClient client = new RestClient(END_WEBSERVICE+"user/");
 		client.AddParam("nome", nome);
 		client.AddParam("email", email);
 		client.AddParam("senha", senha);
@@ -158,7 +166,7 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {*/
 		String response = client.getResponse();
 		usuario = json.fromJson(response, Usuario.class);
 		if(usuario != null){
-			mensagem = "Usu·rio Cadastrado com sucesso!";
+			mensagem = "Usu√°rio Cadastrado com sucesso!";
 		}
 		return mensagem;
 	}
@@ -166,8 +174,8 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {*/
 	@Override
 	public String procurarAmigo(String email) {
 		Gson json = new Gson();
-		String mensagem = "";
-		RestClient client = new RestClient("http://10.0.2.2:8080/WebserviceCadele/webresources/user/friends/search/"+email);
+		String mensagem = "Usu√°rios Encontrados";
+		RestClient client = new RestClient(END_WEBSERVICE+"user/friends/search/"+email);
 		try {
 		    client.Execute(RequestMethod.GET);
 		} catch (Exception e) {
@@ -175,15 +183,15 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {*/
 		}
 		String response = client.getResponse();
 		amigos.add(json.fromJson(response, Usuario.class));
-		if(usuario != null){
-			mensagem = "Usu·rio Cadastrado com sucesso!";
+		if(response == null){
+			mensagem = null;
 		}
 		return mensagem;
 	}
 
 	@Override
 	public String adicionarAmigo(int idUser, int idAmigo) {
-		RestClient client = new RestClient("http://10.0.2.2:8080/WebserviceCadele/webresources/user/friends/"+idUser+"/"+idAmigo);
+		RestClient client = new RestClient(END_WEBSERVICE+"user/friends/"+idUser+"/"+idAmigo);
 		try {
 		    client.Execute(RequestMethod.GET);
 		} catch (Exception e) {
@@ -197,7 +205,7 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {*/
 	public String localizarAmigo(int idAmigo) {
 		Gson json = new Gson();
 		String mensagem = "Localizado";
-		RestClient client = new RestClient("http://10.0.2.2:8080/WebserviceCadele/webresources/location/"+idAmigo);
+		RestClient client = new RestClient(END_WEBSERVICE+"location/"+idAmigo);
 		try {
 		    client.Execute(RequestMethod.GET);
 		} catch (Exception e) {
@@ -219,15 +227,17 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {*/
 	public String listarAmigos(int idUser) {
 		Gson json = new Gson();
 		String mensagem = "";
-		RestClient client = new RestClient("http://10.0.2.2:8080/WebserviceCadele/webresources/user/friends/list/"+idUser);
+		RestClient client = new RestClient(END_WEBSERVICE+"user/friends/list/"+idUser);
 		try {
 		    client.Execute(RequestMethod.GET);
 		} catch (Exception e) {
 		    e.printStackTrace();
 		}
 		String response = client.getResponse();
-		ArrayList lista = json.fromJson(response, ArrayList.class);
+		Type collectionType = new TypeToken<ArrayList<Usuario>>(){}.getType();
+		ArrayList<Usuario> lista = json.fromJson(response, collectionType);
 		amigos.addAll(lista);
+
 		if(lista != null){
 			mensagem = "Listagem com sucesso!";
 		}

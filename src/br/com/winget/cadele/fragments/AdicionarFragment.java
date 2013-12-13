@@ -20,7 +20,8 @@ public class AdicionarFragment extends Fragment {
 	private EditText parser;
 	private TextView tvStatus;
 	private String status;
-		
+	private ListProcurarFragment finders;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -33,6 +34,8 @@ public class AdicionarFragment extends Fragment {
 		super.onStart();
 		buttonProcurar = (Button) getView().findViewById(R.id.bt_procurar);
 		buttonProcurar.setOnClickListener(new ButtonHandler());
+		tvStatus = (TextView) getView().findViewById(R.id.tv_adicionado);
+		finders = (ListProcurarFragment) getFragmentManager().findFragmentById(R.id.fg_adLista);
 	}
 	
 	@Override
@@ -50,16 +53,25 @@ public class AdicionarFragment extends Fragment {
 		@Override
 		public void onClick(View v) {
 			if (v.getId() == R.id.bt_procurar){
-				parser = (EditText) getView().findViewById(R.id.et_emailSearch);
-				email = parser.getText().toString();
-				status = mCallback.procurarAmigo(email);
-				if(status.equals("{null}")){
-					tvStatus.setText("Usu·rio n„o encontrado!");
-				}else{
-					tvStatus.setText("1 usu·rio encontrado");
-					ListProcurarFragment finders = (ListProcurarFragment) getFragmentManager().findFragmentById(R.id.fg_lista);
-					finders.addData(mCallback.getAmigos());
-				}
+				new Thread(new Runnable(){
+	                public void run() {
+						parser = (EditText) getView().findViewById(R.id.et_emailSearch);
+						email = parser.getText().toString();
+						status = mCallback.procurarAmigo(email);
+						Activity act = (Activity) mCallback;
+						act.runOnUiThread(new Runnable() {
+	                        @Override
+	                        public void run() {
+								if(status == null){
+									tvStatus.setText("Usu√°rio n√£o encontrado!");
+								}else{
+									tvStatus.setText("1 usu√°rio encontrado");
+									finders.addData(mCallback.getAmigos());
+								}
+	                        }
+						});
+					}
+				}).start();
 			}
 		}
 	}

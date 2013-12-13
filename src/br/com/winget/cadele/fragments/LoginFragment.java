@@ -58,18 +58,22 @@ public class LoginFragment extends Fragment {
 		@Override
 		public void onClick(View v) {
 			if (v.getId() == R.id.bt_entrar){
-				parser = (EditText) getView().findViewById(R.id.et_email);
-				email = parser.getText().toString();
-				parser = (EditText) getView().findViewById(R.id.et_senha);
-				senha = parser.getText().toString();
-				status = mCallback.autenticacao(email, senha);
-				if(status.equals("1")){
-	//				mCallback.atualizarLocalizacao();
-					mCallback.trocarTela("login","menu");
-				}else{
-					tvStatus = (TextView) getView().findViewById(R.id.tv_erroLogin);
-					tvStatus.setText(status);
-				}
+				new Thread(new Runnable(){
+	                public void run() {
+						parser = (EditText) getView().findViewById(R.id.et_email);
+						email = parser.getText().toString();
+						parser = (EditText) getView().findViewById(R.id.et_senha);
+						senha = parser.getText().toString();
+						status = mCallback.autenticacao(email, senha);
+						if(status.equals("1")){
+			//				mCallback.atualizarLocalizacao();
+							mCallback.trocarTela("login","menu");
+						}else{
+							tvStatus = (TextView) getView().findViewById(R.id.tv_erroLogin);
+							tvStatus.setText(status);
+						}
+					}
+                }).start();
 			}
 			else {
 				mCallback.trocarTela("login","cadastrar");

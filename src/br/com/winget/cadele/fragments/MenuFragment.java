@@ -10,11 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MenuFragment extends Fragment{
 	private InterLogin mCallback;
 	private Button buttonAdicionar;
 	private Button buttonLocalizar;
+	private TextView tvBemvindo;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,6 +34,9 @@ public class MenuFragment extends Fragment{
 		
 		buttonLocalizar = (Button) getView().findViewById(R.id.bt_localizar);
 		buttonLocalizar.setOnClickListener(new ButtonHandler());
+		
+		tvBemvindo = (TextView) getView().findViewById(R.id.tv_bemvindo);
+		tvBemvindo.setText("Bem Vindo, "+ mCallback.getUsuarioLogado().getNome());
 		
 	}
 	

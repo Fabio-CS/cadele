@@ -59,10 +59,20 @@ public class CadastrarFragment extends Fragment {
 				email = parser.getText().toString();
 				parser = (EditText) getView().findViewById(R.id.et_senha);
 				senha = parser.getText().toString();
-				status = mCallback.cadastrar(nome, email, senha);
-				tvStatus = (TextView) getView().findViewById(R.id.tv_adicionado);
-				tvStatus.setText(status);
-				//mCallback.trocarTela("menu");
+				new Thread(new Runnable(){
+		            public void run() {
+						status = mCallback.cadastrar(nome, email, senha);
+						Activity act = (Activity) mCallback;
+						act.runOnUiThread(new Runnable() {
+	                        @Override
+	                        public void run() {
+								tvStatus = (TextView) getView().findViewById(R.id.tv_cad_status);
+								tvStatus.setText(status);
+								mCallback.trocarTela("cadastrar", "menu");
+	                        }
+						});
+		            }
+		        }).start();
 			}
 		}
 	}

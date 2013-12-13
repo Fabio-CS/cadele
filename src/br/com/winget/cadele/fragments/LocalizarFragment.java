@@ -33,8 +33,12 @@ public class LocalizarFragment extends ListFragment {
 		catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString() + " must implement InterLogin");
 		}
-		mCallback.listarAmigos(mCallback.getUsuarioLogado().getId());
-		list.addAll(mCallback.getAmigos());
+		new Thread(new Runnable(){
+            public void run() {
+				mCallback.listarAmigos(mCallback.getUsuarioLogado().getId());
+				list.addAll(mCallback.getAmigos());
+            }
+        }).start();
 		adapter = new ArrayAdapter<Usuario>(getActivity(), android.R.layout.simple_list_item_multiple_choice, list);
 		setListAdapter(adapter);
 	}
@@ -53,8 +57,12 @@ public class LocalizarFragment extends ListFragment {
 	
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		Usuario amigo = (Usuario) l.getItemAtPosition(position);
-		mCallback.localizarAmigo(amigo.getId());
-		mCallback.trocarTela("localizar","mapa");
+		final Usuario amigo = (Usuario) l.getItemAtPosition(position);
+		new Thread(new Runnable(){
+            public void run() {
+				mCallback.localizarAmigo(amigo.getId());
+				mCallback.trocarTela("localizar","mapa");
+            }
+        }).start();
 	}
 }
