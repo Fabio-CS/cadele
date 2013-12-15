@@ -1,7 +1,10 @@
-package br.com.winget.cadele.fragments;
+ package br.com.winget.cadele.fragments;
+
+import java.util.ArrayList;
 
 import br.com.winget.cadele.R;
 import br.com.winget.cadele.interfaces.InterLogin;
+import br.com.winget.cadele.model.Usuario;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,7 +28,7 @@ public class AdicionarFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.adicionar, container, false);
+			View view = inflater.inflate(R.layout.adicionar, container, false);
 		return view;
 	}
 	
@@ -52,6 +55,8 @@ public class AdicionarFragment extends Fragment {
 	public class ButtonHandler implements OnClickListener {
 		@Override
 		public void onClick(View v) {
+			ArrayList<Usuario> amigos = mCallback.getAddAmigos();
+			amigos.clear();
 			if (v.getId() == R.id.bt_procurar){
 				new Thread(new Runnable(){
 	                public void run() {
@@ -63,10 +68,10 @@ public class AdicionarFragment extends Fragment {
 	                        @Override
 	                        public void run() {
 								if(status == null){
-									tvStatus.setText("Usu√°rio n√£o encontrado!");
+									tvStatus.setText("Usu·rio n„o encontrado!");
 								}else{
-									tvStatus.setText("1 usu√°rio encontrado");
-									finders.addData(mCallback.getAmigos());
+									tvStatus.setText(mCallback.getAddAmigos().size()+" usu·rio(s) encontrado(s)");
+									finders.addData(mCallback.getAddAmigos());
 								}
 	                        }
 						});

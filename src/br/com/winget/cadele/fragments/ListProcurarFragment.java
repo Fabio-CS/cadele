@@ -1,8 +1,7 @@
 package br.com.winget.cadele.fragments;
 
 import java.util.ArrayList;
-
-import br.com.winget.cadele.R;
+//import br.com.winget.cadele.R;
 import br.com.winget.cadele.interfaces.InterLogin;
 import br.com.winget.cadele.model.Usuario;
 import android.app.Activity;
@@ -13,14 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
+//import android.widget.TextView;
 
 public class ListProcurarFragment extends ListFragment{
 	private ArrayList<Usuario> list = new ArrayList<Usuario>();
 	private ArrayAdapter<Usuario> adapter;
 	private InterLogin mCallback;
-	private String status;
-	private TextView tvStatus;
+	//private String status;
+	//private TextView tvStatus;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,7 +38,7 @@ public class ListProcurarFragment extends ListFragment{
 		catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString() + " must implement InterLogin");
 		}
-		adapter = new ArrayAdapter<Usuario>(getActivity(), android.R.layout.simple_list_item_multiple_choice, list);
+		adapter = new ArrayAdapter<Usuario>(getActivity(), android.R.layout.simple_list_item_1, list);
 		setListAdapter(adapter);
 		
 	}
@@ -61,7 +60,7 @@ public class ListProcurarFragment extends ListFragment{
 		final Usuario amigo = (Usuario) l.getItemAtPosition(position);
 		new Thread(new Runnable(){
             public void run() {
-				status = mCallback.adicionarAmigo(mCallback.getUsuarioLogado().getId(), amigo.getId());
+				/*status = */mCallback.adicionarAmigo(mCallback.getUsuarioLogado().getId(), amigo.getId());
 				Activity act = (Activity) mCallback;
 				act.runOnUiThread(new Runnable() {
                     @Override

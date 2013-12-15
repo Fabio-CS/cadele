@@ -1,9 +1,7 @@
 package br.com.winget.cadele.interfaces;
 
 import java.util.ArrayList;
-
 import br.com.winget.cadele.model.Localizacao;
-//import br.com.winget.cadele.model.Localizacao;
 import br.com.winget.cadele.model.Usuario;
 
 public interface InterLogin {
@@ -17,5 +15,6 @@ public interface InterLogin {
 	public void atualizarLocalizacao();
 	public Localizacao getLocalizacaoAmigo();
 	public ArrayList<Usuario> getAmigos();
+	public ArrayList<Usuario> getAddAmigos();
 	public Usuario getUsuarioLogado();
 }

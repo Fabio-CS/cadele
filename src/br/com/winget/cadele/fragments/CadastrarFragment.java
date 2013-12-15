@@ -24,6 +24,7 @@ public class CadastrarFragment extends Fragment {
 	private TextView tvStatus;
 	private String status;
 	
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {

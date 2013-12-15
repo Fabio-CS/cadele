@@ -17,12 +17,11 @@ public class LocalizarFragment extends ListFragment {
 	private ArrayList<Usuario> list = new ArrayList<Usuario>();
 	private ArrayAdapter<Usuario> adapter;
 	private InterLogin mCallback;
-	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = super.onCreateView(inflater, container, savedInstanceState);
-		view.setBackgroundColor(Color.WHITE);
+			View view = super.onCreateView(inflater, container, savedInstanceState);
+			view.setBackgroundColor(Color.WHITE);
 		return view;
 	}
 	
@@ -35,6 +34,8 @@ public class LocalizarFragment extends ListFragment {
 		catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString() + " must implement InterLogin");
 		}
+		ArrayList<Usuario> amigos = mCallback.getAmigos();
+		amigos.clear();
 		new Thread(new Runnable(){
             public void run() {
 				mCallback.listarAmigos(mCallback.getUsuarioLogado().getId());
@@ -43,7 +44,7 @@ public class LocalizarFragment extends ListFragment {
 				act.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                    	adapter = new ArrayAdapter<Usuario>(getActivity(), android.R.layout.simple_list_item_multiple_choice, list);
+                    	adapter = new ArrayAdapter<Usuario>(getActivity(), android.R.layout.simple_list_item_single_choice, list);
                 		setListAdapter(adapter);
                     }
                });

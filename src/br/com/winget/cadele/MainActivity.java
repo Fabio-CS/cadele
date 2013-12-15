@@ -3,20 +3,13 @@ package br.com.winget.cadele;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
-
 import br.com.winget.cadele.control.RestClient;
 import br.com.winget.cadele.control.RestClient.RequestMethod;
 import br.com.winget.cadele.fragments.AdicionarFragment;
@@ -30,7 +23,6 @@ import br.com.winget.cadele.model.Localizacao;
 import br.com.winget.cadele.model.Usuario;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -42,6 +34,7 @@ public class MainActivity extends FragmentActivity implements InterLogin, Google
 GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 	
 	private ArrayList<Usuario> amigos = new ArrayList<Usuario>();
+	private ArrayList<Usuario> addAmigos = new ArrayList<Usuario>();
 	private Usuario usuario = new Usuario();
 	private Localizacao localizacaoAmigo = new Localizacao();
 	private Localizacao localizacaoUser = new Localizacao();
@@ -130,27 +123,27 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 		
 		if (telaNova.equals("cadastrar")) {
 			CadastrarFragment novoFragment = new CadastrarFragment();
-			transaction.add(R.id.fragment_container, novoFragment).addToBackStack("cadastrar");
+			transaction.replace(R.id.fragment_container, novoFragment).addToBackStack("cadastrar");
 			transaction.commit();
 		}else if (telaNova.equals("login")) {
 			LoginFragment novoFragment = new LoginFragment();
-			transaction.add(R.id.fragment_container, novoFragment).addToBackStack("login");
+			transaction.replace(R.id.fragment_container, novoFragment).addToBackStack("login");
 			transaction.commit();
 		}else if (telaNova.equals("adicionar")) {
 			AdicionarFragment novoFragment = new AdicionarFragment();
-			transaction.add(R.id.fragment_container, novoFragment).addToBackStack("adicionar");
+			transaction.replace(R.id.fragment_container, novoFragment).addToBackStack("adicionar");
 			transaction.commit();
 		}else if (telaNova.equals("menu")) {
 			MenuFragment novoFragment = new MenuFragment();
-			transaction.add(R.id.fragment_container, novoFragment).addToBackStack("menu");
+			transaction.replace(R.id.fragment_container, novoFragment).addToBackStack("menu");
 			transaction.commit();
 		}else if (telaNova.equals("localizar")) {
 			LocalizarFragment novoFragment = new LocalizarFragment();
-			transaction.add(R.id.fragment_container, novoFragment).addToBackStack("localizar");
+			transaction.replace(R.id.fragment_container, novoFragment).addToBackStack("localizar");
 			transaction.commit();
 		}else if (telaNova.equals("mapa")) {
 			MapaFragment novoFragment = new MapaFragment();
-			transaction.add(R.id.fragment_container, novoFragment).addToBackStack("mapa");
+			transaction.replace(R.id.fragment_container, novoFragment).addToBackStack("mapa");
 			transaction.commit();
 		}
 		
@@ -189,7 +182,9 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 		    e.printStackTrace();
 		}
 		String response = client.getResponse();
-		amigos.add(json.fromJson(response, Usuario.class));
+		Type collectionType = new TypeToken<ArrayList<Usuario>>(){}.getType();
+		ArrayList<Usuario> lista = json.fromJson(response, collectionType);
+		addAmigos.addAll(lista);
 		if(response == null){
 			mensagem = null;
 		}
@@ -308,5 +303,10 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 	            }
 			}).start();
 		}
+	}
+
+	@Override
+	public ArrayList<Usuario> getAddAmigos() {
+		return addAmigos;
 	}
 }
