@@ -209,11 +209,11 @@ containing a value of this type.
         public static final int ic_plusone_tall_off_client=0x7f02001c;
     }
     public static final class id {
-        public static final int action_settings=0x7f050020;
-        public static final int bt_adicionar=0x7f05001c;
+        public static final int action_settings=0x7f050021;
+        public static final int bt_adicionar=0x7f05001d;
         public static final int bt_cadastrar=0x7f050011;
-        public static final int bt_entrar=0x7f050017;
-        public static final int bt_localizar=0x7f05001e;
+        public static final int bt_entrar=0x7f050018;
+        public static final int bt_localizar=0x7f05001f;
         public static final int bt_procurar=0x7f050008;
         public static final int et_email=0x7f05000b;
         public static final int et_emailSearch=0x7f050007;
@@ -222,24 +222,25 @@ containing a value of this type.
         public static final int fg_adLista=0x7f050009;
         public static final int fg_adicionar=0x7f050013;
         public static final int fg_cadastrar=0x7f050014;
-        public static final int fg_lista=0x7f050016;
-        public static final int fg_login=0x7f05001a;
-        public static final int fg_mapa=0x7f05001b;
-        public static final int fg_menu=0x7f050015;
-        public static final int fragment_container=0x7f050019;
+        public static final int fg_lista=0x7f050017;
+        public static final int fg_login=0x7f05001b;
+        public static final int fg_mapa=0x7f050015;
+        public static final int fg_menu=0x7f050016;
+        public static final int fragment_container=0x7f05001a;
         public static final int hybrid=0x7f050004;
+        public static final int mapa=0x7f05001c;
         public static final int none=0x7f050000;
         public static final int normal=0x7f050001;
         public static final int satellite=0x7f050002;
         public static final int terrain=0x7f050003;
         public static final int tv_adicionado=0x7f05000a;
         public static final int tv_adicionar=0x7f050005;
-        public static final int tv_bemvindo=0x7f05001f;
+        public static final int tv_bemvindo=0x7f050020;
         public static final int tv_cad_status=0x7f050012;
         public static final int tv_cadastrar=0x7f05000c;
         public static final int tv_email=0x7f050006;
-        public static final int tv_erroLogin=0x7f050018;
-        public static final int tv_menu=0x7f05001d;
+        public static final int tv_erroLogin=0x7f050019;
+        public static final int tv_menu=0x7f05001e;
         public static final int tv_nome=0x7f05000f;
         public static final int tv_senha=0x7f05000d;
     }
@@ -251,12 +252,13 @@ containing a value of this type.
         public static final int cadastrar=0x7f030001;
         public static final int frag_adicionar=0x7f030002;
         public static final int frag_cadastrar=0x7f030003;
-        public static final int frag_menu=0x7f030004;
-        public static final int localizar=0x7f030005;
-        public static final int login=0x7f030006;
-        public static final int main=0x7f030007;
-        public static final int mapa=0x7f030008;
-        public static final int menu=0x7f030009;
+        public static final int frag_mapa=0x7f030004;
+        public static final int frag_menu=0x7f030005;
+        public static final int localizar=0x7f030006;
+        public static final int login=0x7f030007;
+        public static final int main=0x7f030008;
+        public static final int mapa=0x7f030009;
+        public static final int menu=0x7f03000a;
     }
     public static final class menu {
         public static final int main=0x7f0a0000;

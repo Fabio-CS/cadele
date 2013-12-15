@@ -2,7 +2,9 @@ package br.com.winget.cadele;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -21,6 +23,7 @@ import br.com.winget.cadele.fragments.AdicionarFragment;
 import br.com.winget.cadele.fragments.CadastrarFragment;
 import br.com.winget.cadele.fragments.LocalizarFragment;
 import br.com.winget.cadele.fragments.LoginFragment;
+import br.com.winget.cadele.fragments.MapaFragment;
 import br.com.winget.cadele.fragments.MenuFragment;
 import br.com.winget.cadele.interfaces.InterLogin;
 import br.com.winget.cadele.model.Localizacao;
@@ -35,26 +38,28 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.ViewGroup;
 
-public class MainActivity extends FragmentActivity implements InterLogin{/*, GooglePlayServicesClient.ConnectionCallbacks,
-GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {*/
+public class MainActivity extends FragmentActivity implements InterLogin, GooglePlayServicesClient.ConnectionCallbacks,
+GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 	
 	private ArrayList<Usuario> amigos = new ArrayList<Usuario>();
 	private Usuario usuario = new Usuario();
 	private Localizacao localizacaoAmigo = new Localizacao();
 	private Localizacao localizacaoUser = new Localizacao();
-	private static final String END_WEBSERVICE = "http://192.168.9.31:8080/WebserviceCadele/webresources/";
-	/*private LocationClient locationLister = new LocationClient(this, this, this);
+	private static final String END_WEBSERVICE = "http://192.168.1.7:8080/WebserviceCadele/webresources/";
+	
+	private LocationRequest mLocationRequest;
+	private LocationClient mLocationClient;
+	
+	//private LocationClient locationLister = new LocationClient(this, this, this);
 	// Milliseconds per second
     private static final int MILLISECONDS_PER_SECOND = 1000;
     // Update frequency in seconds
-    public static final int UPDATE_INTERVAL_IN_SECONDS = 30;
+    public static final int UPDATE_INTERVAL_IN_SECONDS = 60;
     // Update frequency in milliseconds
-    private static final long UPDATE_INTERVAL =
-            MILLISECONDS_PER_SECOND * UPDATE_INTERVAL_IN_SECONDS;
+    private static final long UPDATE_INTERVAL = MILLISECONDS_PER_SECOND * UPDATE_INTERVAL_IN_SECONDS;
 
     
-    // Define an object that holds accuracy and frequency parameters
-    LocationRequest mLocationRequest;*/
+    
 	
 	@Override
 	public ArrayList<Usuario> getAmigos(){
@@ -65,9 +70,11 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {*/
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-	/*	 mLocationRequest = LocationRequest.create();
+		 mLocationRequest = LocationRequest.create();
 	     mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-	     mLocationRequest.setInterval(UPDATE_INTERVAL);*/
+	     mLocationRequest.setInterval(UPDATE_INTERVAL);
+	     mLocationClient = new LocationClient(this, this, this);
+	     mLocationClient.connect();
 	}
 
 	@Override
@@ -142,7 +149,7 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {*/
 			transaction.add(R.id.fragment_container, novoFragment).addToBackStack("localizar");
 			transaction.commit();
 		}else if (telaNova.equals("mapa")) {
-			SupportMapFragment novoFragment = new SupportMapFragment();
+			MapaFragment novoFragment = new MapaFragment();
 			transaction.add(R.id.fragment_container, novoFragment).addToBackStack("mapa");
 			transaction.commit();
 		}
@@ -152,7 +159,7 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {*/
 	@Override
 	public String cadastrar(String nome, String email, String senha) {
 		Gson json = new Gson();
-		String mensagem = "Erro ao cadastrar usu√°rio";
+		String mensagem = "Erro ao cadastrar usu·rio";
 		RestClient client = new RestClient(END_WEBSERVICE+"user/");
 		client.AddParam("nome", nome);
 		client.AddParam("email", email);
@@ -166,7 +173,7 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {*/
 		String response = client.getResponse();
 		usuario = json.fromJson(response, Usuario.class);
 		if(usuario != null){
-			mensagem = "Usu√°rio Cadastrado com sucesso!";
+			mensagem = "Usu·rio Cadastrado com sucesso!";
 		}
 		return mensagem;
 	}
@@ -174,7 +181,7 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {*/
 	@Override
 	public String procurarAmigo(String email) {
 		Gson json = new Gson();
-		String mensagem = "Usu√°rios Encontrados";
+		String mensagem = "Usu·rios Encontrados";
 		RestClient client = new RestClient(END_WEBSERVICE+"user/friends/search/"+email);
 		try {
 		    client.Execute(RequestMethod.GET);
@@ -213,7 +220,7 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {*/
 		}
 		String response = client.getResponse();
 		localizacaoAmigo = json.fromJson(response, Localizacao.class);
-		if(response.equals("{null}"))
+		if(localizacaoAmigo.getId() == 0)
 			mensagem = "Erro";
 		return mensagem;
 	}
@@ -234,10 +241,10 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {*/
 		    e.printStackTrace();
 		}
 		String response = client.getResponse();
+		amigos.removeAll(Collections.singleton(null));
 		Type collectionType = new TypeToken<ArrayList<Usuario>>(){}.getType();
 		ArrayList<Usuario> lista = json.fromJson(response, collectionType);
 		amigos.addAll(lista);
-
 		if(lista != null){
 			mensagem = "Listagem com sucesso!";
 		}
@@ -245,7 +252,7 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {*/
 	}
 	
 
-	/*@Override
+	@Override
 	public Localizacao getLocalizacaoAmigo() {
 		return localizacaoAmigo;
 	}
@@ -255,57 +262,51 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {*/
 		System.out.print("Errou!");
 	}
 
-	/*@Override
+	@Override
 	public void onConnected(Bundle arg0) {
-		if (locationLister != null && locationLister.isConnected()) {
-			locationLister.requestLocationUpdates(mLocationRequest, this);
+		if (mLocationClient != null && mLocationClient.isConnected()) {
+			mLocationClient.requestLocationUpdates(mLocationRequest, this);
 	    }
 		
 	}
 
 	@Override
 	public void onDisconnected() {
-		locationLister.disconnect();
+		mLocationClient.disconnect();
 	}
 
 	@Override
 	public void onLocationChanged(Location location) {
-		Location localNow = locationLister.getLastLocation();
-		Gson json = new Gson();
-		RestClient client = new RestClient("http://10.0.2.2:8080/WebserviceCadele/webresources/location/update");
-		client.AddParam("id", usuario.getId()+"");
-		client.AddParam("latitude", localNow.getLatitude()+"");
-		client.AddParam("longitude", localNow.getLongitude()+"");
-		client.AddParam("altitude", localNow.getAltitude()+"");
-		client.AddHeader("Content-Type", "application/x-www-form-urlencoded");
-		try {
-		    client.Execute(RequestMethod.POST);
-		} catch (Exception e) {
-		    e.printStackTrace();
-		}
-		String response = client.getResponse();
-		localizacaoUser = json.fromJson(response, Localizacao.class);
+		this.atualizarLocalizacao();
 	}
-
+	
 	@Override
 	public void atualizarLocalizacao() {
-		locationLister.connect();
-		Location localNow = locationLister.getLastLocation();
-		Gson json = new Gson();
-		RestClient client = new RestClient("http://10.0.2.2:8080/WebserviceCadele/webresources/location/update");
-		client.AddParam("id", usuario.getId()+"");
-		client.AddParam("latitude", localNow.getLatitude()+"");
-		client.AddParam("longitude", localNow.getLongitude()+"");
-		client.AddParam("altitude", localNow.getAltitude()+"");
-		client.AddHeader("Content-Type", "application/x-www-form-urlencoded");
-		try {
-		    client.Execute(RequestMethod.POST);
-		} catch (Exception e) {
-		    e.printStackTrace();
+		Location localNow = mLocationClient.getLastLocation();
+		Localizacao localizacao = new Localizacao();
+		localizacao.setLatitude(localNow.getLatitude());
+		localizacao.setLongitude(localNow.getLongitude());
+		localizacao.setAltitude(localNow.getAltitude());
+		localizacao.setIdUser(usuario.getId());
+		if(!(localizacaoUser.equals(localizacao))){
+			final Gson json = new Gson();
+			final RestClient client = new RestClient(END_WEBSERVICE+"location/update");
+			client.AddParam("id_usuario", usuario.getId()+"");
+			client.AddParam("latitude", localNow.getLatitude()+"");
+			client.AddParam("longitude", localNow.getLongitude()+"");
+			client.AddParam("altitude", localNow.getAltitude()+"");
+			client.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+			new Thread(new Runnable(){
+	            public void run() {
+					try {
+					    client.Execute(RequestMethod.POST);
+					} catch (Exception e) {
+					    e.printStackTrace();
+					}
+					String response = client.getResponse();
+					localizacaoUser = json.fromJson(response, Localizacao.class);
+	            }
+			}).start();
 		}
-		String response = client.getResponse();
-		localizacaoUser = json.fromJson(response, Localizacao.class);
-		
-	}*/
-
+	}
 }

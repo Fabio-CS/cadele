@@ -1,25 +1,27 @@
 package br.com.winget.cadele.fragments;
 
+import java.util.ArrayList;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import br.com.winget.cadele.R;
 import br.com.winget.cadele.interfaces.InterLogin;
 import br.com.winget.cadele.model.Localizacao;
-import android.annotation.SuppressLint;
+import br.com.winget.cadele.model.Usuario;
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-@SuppressLint("NewApi")
-public class MapaFragment extends MapFragment {
+public class MapaFragment extends Fragment {
 	private InterLogin mCallback;
 	private Localizacao localizacaoAmigo;
+	private Usuario amigo;
+	private ArrayList<Usuario> amigos;
 	private GoogleMap map;
 	
 	@Override
@@ -29,17 +31,22 @@ public class MapaFragment extends MapFragment {
 		return view;
 	}
 	
-	@SuppressLint("NewApi")
 	@Override
 	public void onStart() {
 		super.onStart();
-		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.fg_mapa)).getMap();
+		map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.mapa)).getMap();
 		map.clear();
-		//localizacaoAmigo = mCallback.getLocalizacaoAmigo();
+		localizacaoAmigo = mCallback.getLocalizacaoAmigo();
+		amigos = mCallback.getAmigos();
+		for(Usuario friend : amigos){
+			if(friend.getId() == localizacaoAmigo.getIdUser()){
+				amigo = friend;
+			}
+		}		
 		LatLng local = new LatLng(localizacaoAmigo.getLatitude(),localizacaoAmigo.getLongitude());
-		map.addMarker(new MarkerOptions().position(local).title(localizacaoAmigo.getData()));
+		map.addMarker(new MarkerOptions().position(local).title("Localização de "+amigo.getNome()).snippet(localizacaoAmigo.getData()));
 		map.moveCamera(CameraUpdateFactory.newLatLng(local));
-	    map.animateCamera(CameraUpdateFactory.zoomTo(15));
+	    map.animateCamera(CameraUpdateFactory.zoomTo(17));
 	}
 	
 	@Override

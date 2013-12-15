@@ -41,6 +41,7 @@ public class LoginFragment extends Fragment {
 		buttonCadastrar = (Button) getView().findViewById(R.id.bt_cadastrar);
 		buttonCadastrar.setOnClickListener(new ButtonHandler());
 		
+		tvStatus = (TextView) getView().findViewById(R.id.tv_erroLogin);
 	}
 	
 	@Override
@@ -66,11 +67,16 @@ public class LoginFragment extends Fragment {
 						senha = parser.getText().toString();
 						status = mCallback.autenticacao(email, senha);
 						if(status.equals("1")){
-			//				mCallback.atualizarLocalizacao();
+							mCallback.atualizarLocalizacao();
 							mCallback.trocarTela("login","menu");
 						}else{
-							tvStatus = (TextView) getView().findViewById(R.id.tv_erroLogin);
-							tvStatus.setText(status);
+							Activity act = (Activity) mCallback;
+							act.runOnUiThread(new Runnable() {
+		                        @Override
+		                        public void run() {
+		                        	tvStatus.setText(status);
+		                        }
+							});
 						}
 					}
                 }).start();

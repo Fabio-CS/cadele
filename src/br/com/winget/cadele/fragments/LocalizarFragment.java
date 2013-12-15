@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import br.com.winget.cadele.interfaces.InterLogin;
 import br.com.winget.cadele.model.Usuario;
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ public class LocalizarFragment extends ListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = super.onCreateView(inflater, container, savedInstanceState);
+		view.setBackgroundColor(Color.WHITE);
 		return view;
 	}
 	
@@ -37,10 +39,16 @@ public class LocalizarFragment extends ListFragment {
             public void run() {
 				mCallback.listarAmigos(mCallback.getUsuarioLogado().getId());
 				list.addAll(mCallback.getAmigos());
+				Activity act = (Activity) mCallback;
+				act.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                    	adapter = new ArrayAdapter<Usuario>(getActivity(), android.R.layout.simple_list_item_multiple_choice, list);
+                		setListAdapter(adapter);
+                    }
+               });
             }
         }).start();
-		adapter = new ArrayAdapter<Usuario>(getActivity(), android.R.layout.simple_list_item_multiple_choice, list);
-		setListAdapter(adapter);
 	}
 	
 	public void addData(ArrayList<Usuario> users){
